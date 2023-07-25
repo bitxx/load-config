@@ -2,4 +2,4 @@
 .vscode
 *.exe
 .DS_Store
-
+go.sum
