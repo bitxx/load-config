@@ -1,17 +1,17 @@
-package sdk
+package loadconfig
 
 import (
 	"fmt"
-	"load-config/source"
-	"load-config/source/env"
-	file2 "load-config/source/file"
-	memory2 "load-config/source/memory"
-	"os"
-	"path/filepath"
-	"runtime"
-	"strings"
-	"testing"
-	"time"
+"loadconfig/source"
+"loadconfig/source/env"
+file2 "loadconfig/source/file"
+memory2 "loadconfig/source/memory"
+"os"
+"path/filepath"
+"runtime"
+"strings"
+"testing"
+"time"
 )
 
 func createFileForIssue18(t *testing.T, content string) *os.File {

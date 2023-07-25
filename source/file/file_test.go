@@ -2,8 +2,9 @@ package file_test
 
 import (
 	"fmt"
-	"load-config"
-	file2 "load-config/source/file"
+	"loadconfig"
+
+	"loadconfig/source/file"
 	"os"
 	"path/filepath"
 	"testing"
@@ -26,11 +27,11 @@ func TestConfig(t *testing.T) {
 		t.Error(err)
 	}
 
-	conf, err := sdk.NewConfig()
+	conf, err := loadconfig.NewConfig()
 	if err != nil {
 		t.Fatal(err)
 	}
-	conf.Load(file2.NewSource(file2.WithPath(path)))
+	conf.Load(file.NewSource(file.WithPath(path)))
 	// simulate multiple close
 	go conf.Close()
 	go conf.Close()
@@ -53,7 +54,7 @@ func TestFile(t *testing.T) {
 		t.Error(err)
 	}
 
-	f := file2.NewSource(file2.WithPath(path))
+	f := file.NewSource(file.WithPath(path))
 	c, err := f.Read()
 	if err != nil {
 		t.Error(err)

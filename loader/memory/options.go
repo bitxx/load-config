@@ -1,9 +1,9 @@
 package memory
 
 import (
-	"load-config/loader"
-	"load-config/reader"
-	"load-config/source"
+	"loadconfig/loader"
+	"loadconfig/reader"
+	"loadconfig/source"
 )
 
 // WithSource appends a source to list of sources

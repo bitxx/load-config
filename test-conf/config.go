@@ -1,9 +1,9 @@
-package config
+package test
 
 import (
 	"fmt"
-	sdk "load-config"
-	"load-config/source"
+	"loadconfig"
+	"loadconfig/source"
 	"log"
 )
 
@@ -41,7 +41,6 @@ func (e *Settings) init() {
 // Config 配置集合
 type Config struct {
 	Application *Application          `yaml:"application"`
-	Ssl         *Ssl                  `yaml:"ssl"`
 	Auth        *Auth                 `yaml:"auth"`
 	Database    *Database             `yaml:"database"`
 	Databases   *map[string]*Database `yaml:"databases"`
@@ -64,7 +63,6 @@ func Setup(s source.Source,
 	_cfg = &Settings{
 		Settings: Config{
 			Application: ApplicationConfig,
-			Ssl:         SslConfig,
 			Auth:        AuthConfig,
 			Database:    DatabaseConfig,
 			Databases:   &DatabasesConfig,
@@ -73,9 +71,9 @@ func Setup(s source.Source,
 		callbacks: fs,
 	}
 	var err error
-	sdk.DefaultConfig, err = sdk.NewConfig(
-		sdk.WithSource(s),
-		sdk.WithEntity(_cfg),
+	loadconfig.DefaultConfig, err = loadconfig.NewConfig(
+		loadconfig.WithSource(s),
+		loadconfig.WithEntity(_cfg),
 	)
 	if err != nil {
 		log.Fatal(fmt.Sprintf("New config object fail: %s", err.Error()))

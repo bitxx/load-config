@@ -1,4 +1,4 @@
-module load-config
+module loadconfig
 
 go 1.20
 

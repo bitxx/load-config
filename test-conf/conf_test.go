@@ -1,9 +1,9 @@
-package config
+package test
 
 import (
 	"fmt"
-	"load-config/source/file"
-	"testing"
+"loadconfig/source/file"
+"testing"
 )
 
 func TestName(t *testing.T) {

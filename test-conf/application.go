@@ -1,4 +1,4 @@
-package config
+package test
 
 type Application struct {
 	ReadTimeout   int

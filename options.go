@@ -1,9 +1,9 @@
-package sdk
+package loadconfig
 
 import (
-	"load-config/loader"
-	"load-config/reader"
-	"load-config/source"
+	"loadconfig/loader"
+	"loadconfig/reader"
+	"loadconfig/source"
 )
 
 // WithLoader sets the loader for manager config

@@ -2,7 +2,7 @@ package file
 
 import (
 	"context"
-	"load-config/source"
+	"loadconfig/source"
 )
 
 type filePathKey struct{}

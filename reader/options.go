@@ -1,11 +1,11 @@
 package reader
 
 import (
-	"load-config/encoder"
-	"load-config/encoder/json"
-	"load-config/encoder/toml"
-	"load-config/encoder/xml"
-	"load-config/encoder/yaml"
+	"loadconfig/encoder"
+	"loadconfig/encoder/json"
+	"loadconfig/encoder/toml"
+	"loadconfig/encoder/xml"
+	"loadconfig/encoder/yaml"
 )
 
 type Options struct {

@@ -4,10 +4,9 @@
 package file
 
 import (
-	"load-config/source"
-	"os"
-
 	"github.com/fsnotify/fsnotify"
+	"loadconfig/source"
+	"os"
 )
 
 type watcher struct {

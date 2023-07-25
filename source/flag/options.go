@@ -2,7 +2,7 @@ package flag
 
 import (
 	"context"
-	"load-config/source"
+	"loadconfig/source"
 )
 
 type includeUnsetKey struct{}

@@ -1,12 +1,12 @@
 // Package config is an interface for dynamic configuration.
-package sdk
+package loadconfig
 
 import (
 	"context"
-	"load-config/loader"
-	"load-config/reader"
-	"load-config/source"
-	file2 "load-config/source/file"
+"loadconfig/loader"
+"loadconfig/reader"
+"loadconfig/source"
+file2 "loadconfig/source/file"
 )
 
 // Config is an interface abstraction for dynamic configuration

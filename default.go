@@ -1,12 +1,12 @@
-package sdk
+package loadconfig
 
 import (
 	"bytes"
-	"load-config/loader"
-	"load-config/loader/memory"
-	"load-config/reader"
-	"load-config/reader/json"
-	"load-config/source"
+	"loadconfig/loader"
+	"loadconfig/loader/memory"
+	"loadconfig/reader"
+	"loadconfig/reader/json"
+	"loadconfig/source"
 
 	"sync"
 	"time"

@@ -2,7 +2,7 @@ package env
 
 import (
 	"context"
-	"load-config/source"
+	"loadconfig/source"
 
 	"strings"
 )

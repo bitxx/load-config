@@ -2,10 +2,10 @@ package env
 
 import (
 	"encoding/json"
-	source "load-config/source"
-	"os"
-	"testing"
-	"time"
+source "loadconfig/source"
+"os"
+"testing"
+"time"
 )
 
 func TestEnv_Read(t *testing.T) {

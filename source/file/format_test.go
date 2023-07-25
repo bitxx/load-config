@@ -1,7 +1,7 @@
 package file
 
 import (
-	"load-config/source"
+	"loadconfig/source"
 	"testing"
 )
 

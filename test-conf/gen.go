@@ -1,4 +1,4 @@
-package config
+package test
 
 type Gen struct {
 	FrontPath string

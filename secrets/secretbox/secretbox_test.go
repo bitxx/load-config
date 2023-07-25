@@ -2,7 +2,7 @@ package secretbox
 
 import (
 	"encoding/base64"
-	"load-config/secrets"
+	"loadconfig/secrets"
 	"reflect"
 	"testing"
 )

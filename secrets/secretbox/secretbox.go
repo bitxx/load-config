@@ -5,7 +5,7 @@ package secretbox
 import (
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/nacl/secretbox"
-	"load-config/secrets"
+	"loadconfig/secrets"
 
 	"crypto/rand"
 )

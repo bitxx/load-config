@@ -2,7 +2,7 @@
 package reader
 
 import (
-	"load-config/source"
+	"loadconfig/source"
 	"time"
 )
 

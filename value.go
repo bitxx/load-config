@@ -1,7 +1,7 @@
-package sdk
+package loadconfig
 
 import (
-	"load-config/reader"
+	"loadconfig/reader"
 	"time"
 )
 

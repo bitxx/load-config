@@ -2,7 +2,7 @@ package memory
 
 import (
 	"context"
-	source "load-config/source"
+	"loadconfig/source"
 )
 
 type changeSetKey struct{}

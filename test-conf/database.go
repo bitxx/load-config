@@ -1,4 +1,4 @@
-package config
+package test
 
 type Database struct {
 	Driver          string

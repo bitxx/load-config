@@ -1,7 +1,7 @@
 package env
 
 import (
-	"load-config/source"
+	"loadconfig/source"
 )
 
 type watcher struct {

@@ -2,7 +2,7 @@ package xml
 
 import (
 	"encoding/xml"
-	"load-config/encoder"
+	"loadconfig/encoder"
 )
 
 type xmlEncoder struct{}

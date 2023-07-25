@@ -1,7 +1,7 @@
 package json
 
 import (
-	"load-config/source"
+	"loadconfig/source"
 	"reflect"
 	"testing"
 )

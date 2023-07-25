@@ -2,8 +2,8 @@ package source
 
 import (
 	"context"
-	"load-config/encoder"
-	"load-config/encoder/json"
+	"loadconfig/encoder"
+	"loadconfig/encoder/json"
 )
 
 type Options struct {

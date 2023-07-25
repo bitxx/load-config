@@ -2,7 +2,7 @@ package box
 
 import (
 	"crypto/rand"
-	"load-config/secrets"
+	"loadconfig/secrets"
 	"reflect"
 	"testing"
 

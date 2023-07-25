@@ -3,7 +3,7 @@ package file
 
 import (
 	"io/ioutil"
-	"load-config/source"
+	"loadconfig/source"
 	"os"
 )
 

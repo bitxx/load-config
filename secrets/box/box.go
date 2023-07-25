@@ -4,7 +4,7 @@ package box
 import (
 	"github.com/pkg/errors"
 	naclbox "golang.org/x/crypto/nacl/box"
-	"load-config/secrets"
+	"loadconfig/secrets"
 
 	"crypto/rand"
 )

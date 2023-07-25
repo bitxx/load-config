@@ -3,8 +3,8 @@ package json
 import (
 	"encoding/json"
 	"fmt"
-	reader2 "load-config/reader"
-	"load-config/source"
+	"loadconfig/reader"
+	"loadconfig/source"
 	"strconv"
 	"strings"
 	"time"
@@ -21,16 +21,16 @@ type jsonValue struct {
 	*simple.Json
 }
 
-func newValues(ch *source.ChangeSet) (reader2.Values, error) {
+func newValues(ch *source.ChangeSet) (reader.Values, error) {
 	sj := simple.New()
-	data, _ := reader2.ReplaceEnvVars(ch.Data)
+	data, _ := reader.ReplaceEnvVars(ch.Data)
 	if err := sj.UnmarshalJSON(data); err != nil {
 		sj.SetPath(nil, string(ch.Data))
 	}
 	return &jsonValues{ch, sj}, nil
 }
 
-func (j *jsonValues) Get(path ...string) reader2.Value {
+func (j *jsonValues) Get(path ...string) reader.Value {
 	return &jsonValue{j.sj.GetPath(path...)}
 }
 

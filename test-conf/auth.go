@@ -1,4 +1,4 @@
-package config
+package test
 
 type Auth struct {
 	Use     string

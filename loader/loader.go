@@ -3,8 +3,8 @@ package loader
 
 import (
 	"context"
-	"load-config/reader"
-	"load-config/source"
+	"loadconfig/reader"
+	"loadconfig/source"
 )
 
 // Loader manages loading sources

@@ -2,7 +2,7 @@
 package memory
 
 import (
-	"load-config/source"
+	"loadconfig/source"
 	"sync"
 	"time"
 

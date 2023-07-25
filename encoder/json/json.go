@@ -2,7 +2,7 @@ package json
 
 import (
 	"encoding/json"
-	"load-config/encoder"
+	"loadconfig/encoder"
 )
 
 type jsonEncoder struct{}
