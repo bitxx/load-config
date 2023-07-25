@@ -2,6 +2,7 @@ package file_test
 
 import (
 	"fmt"
+	loadconfig "github.com/jason-wj/load-config"
 	"github.com/jason-wj/load-config/source/file"
 	"os"
 	"path/filepath"
@@ -25,7 +26,7 @@ func TestConfig(t *testing.T) {
 		t.Error(err)
 	}
 
-	conf, err := load - config.NewConfig()
+	conf, err := loadconfig.NewConfig()
 	if err != nil {
 		t.Fatal(err)
 	}
