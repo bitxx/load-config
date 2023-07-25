@@ -2,10 +2,10 @@ package loadconfig
 
 import (
 	"fmt"
-	"github.com/jason-wj/load-config/source"
-	"github.com/jason-wj/load-config/source/env"
-	"github.com/jason-wj/load-config/source/file"
-	"github.com/jason-wj/load-config/source/memory"
+	"github.com/jason-wj/loadconfig/source"
+	"github.com/jason-wj/loadconfig/source/env"
+	"github.com/jason-wj/loadconfig/source/file"
+	"github.com/jason-wj/loadconfig/source/memory"
 	"os"
 	"path/filepath"
 	"runtime"

@@ -2,7 +2,7 @@ package yaml
 
 import (
 	"github.com/ghodss/yaml"
-	"github.com/jason-wj/load-config/encoder"
+	"github.com/jason-wj/loadconfig/encoder"
 )
 
 type yamlEncoder struct{}

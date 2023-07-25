@@ -2,7 +2,7 @@ package env
 
 import (
 	"encoding/json"
-	source "github.com/jason-wj/load-config/source"
+	source "github.com/jason-wj/loadconfig/source"
 	"os"
 	"testing"
 	"time"
