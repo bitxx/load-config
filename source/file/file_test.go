@@ -25,7 +25,7 @@ func TestConfig(t *testing.T) {
 		t.Error(err)
 	}
 
-	conf, err := loadconfig.NewConfig()
+	conf, err := load - config.NewConfig()
 	if err != nil {
 		t.Fatal(err)
 	}
