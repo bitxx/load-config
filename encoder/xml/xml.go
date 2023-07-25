@@ -2,7 +2,7 @@ package xml
 
 import (
 	"encoding/xml"
-	"loadconfig/encoder"
+	"github.com/jason-wj/load-config/encoder"
 )
 
 type xmlEncoder struct{}

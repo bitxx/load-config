@@ -2,8 +2,8 @@ package test
 
 import (
 	"fmt"
-	"loadconfig"
-	"loadconfig/source"
+	"github.com/jason-wj/load-config"
+	"github.com/jason-wj/load-config/source"
 	"log"
 )
 

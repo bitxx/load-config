@@ -5,7 +5,7 @@ package file
 
 import (
 	"github.com/fsnotify/fsnotify"
-	"loadconfig/source"
+	"github.com/jason-wj/load-config/source"
 	"os"
 )
 

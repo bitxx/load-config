@@ -2,7 +2,7 @@ package env
 
 import (
 	"context"
-	"loadconfig/source"
+	"github.com/jason-wj/load-config/source"
 
 	"strings"
 )

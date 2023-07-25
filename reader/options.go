@@ -1,11 +1,11 @@
 package reader
 
 import (
-	"loadconfig/encoder"
-	"loadconfig/encoder/json"
-	"loadconfig/encoder/toml"
-	"loadconfig/encoder/xml"
-	"loadconfig/encoder/yaml"
+	"github.com/jason-wj/load-config/encoder"
+	"github.com/jason-wj/load-config/encoder/json"
+	"github.com/jason-wj/load-config/encoder/toml"
+	"github.com/jason-wj/load-config/encoder/xml"
+	"github.com/jason-wj/load-config/encoder/yaml"
 )
 
 type Options struct {

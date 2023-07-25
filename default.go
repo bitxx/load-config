@@ -2,11 +2,11 @@ package loadconfig
 
 import (
 	"bytes"
-	"loadconfig/loader"
-	"loadconfig/loader/memory"
-	"loadconfig/reader"
-	"loadconfig/reader/json"
-	"loadconfig/source"
+	"github.com/jason-wj/load-config/loader"
+	"github.com/jason-wj/load-config/loader/memory"
+	"github.com/jason-wj/load-config/reader"
+	"github.com/jason-wj/load-config/reader/json"
+	"github.com/jason-wj/load-config/source"
 
 	"sync"
 	"time"

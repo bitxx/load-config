@@ -3,8 +3,8 @@ package json
 import (
 	"encoding/json"
 	"fmt"
-	"loadconfig/reader"
-	"loadconfig/source"
+	"github.com/jason-wj/load-config/reader"
+	"github.com/jason-wj/load-config/source"
 	"strconv"
 	"strings"
 	"time"

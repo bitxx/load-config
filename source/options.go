@@ -2,8 +2,8 @@ package source
 
 import (
 	"context"
-	"loadconfig/encoder"
-	"loadconfig/encoder/json"
+	"github.com/jason-wj/load-config/encoder"
+	"github.com/jason-wj/load-config/encoder/json"
 )
 
 type Options struct {

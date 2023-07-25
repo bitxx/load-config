@@ -2,8 +2,8 @@ package test
 
 import (
 	"fmt"
-"loadconfig/source/file"
-"testing"
+	"github.com/jason-wj/load-config/source/file"
+	"testing"
 )
 
 func TestName(t *testing.T) {

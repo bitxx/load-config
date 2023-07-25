@@ -2,9 +2,9 @@
 package box
 
 import (
+	"github.com/jason-wj/load-config/secrets"
 	"github.com/pkg/errors"
 	naclbox "golang.org/x/crypto/nacl/box"
-	"loadconfig/secrets"
 
 	"crypto/rand"
 )

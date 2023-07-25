@@ -2,7 +2,7 @@ package memory
 
 import (
 	"context"
-	"loadconfig/source"
+	"github.com/jason-wj/load-config/source"
 )
 
 type changeSetKey struct{}

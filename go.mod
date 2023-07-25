@@ -1,4 +1,4 @@
-module loadconfig
+module github.com/jason-wj/load-config
 
 go 1.20
 

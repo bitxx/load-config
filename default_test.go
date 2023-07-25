@@ -2,16 +2,16 @@ package loadconfig
 
 import (
 	"fmt"
-"loadconfig/source"
-"loadconfig/source/env"
-file2 "loadconfig/source/file"
-memory2 "loadconfig/source/memory"
-"os"
-"path/filepath"
-"runtime"
-"strings"
-"testing"
-"time"
+	"github.com/jason-wj/load-config/source"
+	"github.com/jason-wj/load-config/source/env"
+	"github.com/jason-wj/load-config/source/file"
+	"github.com/jason-wj/load-config/source/memory"
+	"os"
+	"path/filepath"
+	"runtime"
+	"strings"
+	"testing"
+	"time"
 )
 
 func createFileForIssue18(t *testing.T, content string) *os.File {
@@ -58,8 +58,8 @@ func TestConfigLoadWithGoodFile(t *testing.T) {
 		t.Fatalf("Expected no error but got %v", err)
 	}
 	// Load file source
-	if err := conf.Load(file2.NewSource(
-		file2.WithPath(path),
+	if err := conf.Load(file.NewSource(
+		file.WithPath(path),
 	)); err != nil {
 		t.Fatalf("Expected no error but got %v", err)
 	}
@@ -79,9 +79,9 @@ func TestConfigLoadWithInvalidFile(t *testing.T) {
 		t.Fatalf("Expected no error but got %v", err)
 	}
 	// Load file source
-	err = conf.Load(file2.NewSource(
-		file2.WithPath(path),
-		file2.WithPath("/i/do/not/exists.json"),
+	err = conf.Load(file.NewSource(
+		file.WithPath(path),
+		file.WithPath("/i/do/not/exists.json"),
 	))
 
 	if err == nil {
@@ -114,8 +114,8 @@ func TestConfigMerge(t *testing.T) {
 		t.Fatalf("Expected no error but got %v", err)
 	}
 	if err := conf.Load(
-		file2.NewSource(
-			file2.WithPath(path),
+		file.NewSource(
+			file.WithPath(path),
 		),
 		env.NewSource(),
 	); err != nil {
@@ -147,7 +147,7 @@ func TestConfigWatcherDirtyOverrite(t *testing.T) {
 	ss := make([]source.Source, l, l)
 
 	for i := 0; i < l; i++ {
-		ss[i] = memory2.NewSource(memory2.WithJSON([]byte(fmt.Sprintf(`{"key%d": "val%d"}`, i, i))))
+		ss[i] = memory.NewSource(memory.WithJSON([]byte(fmt.Sprintf(`{"key%d": "val%d"}`, i, i))))
 	}
 
 	conf, _ := NewConfig()

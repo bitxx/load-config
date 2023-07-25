@@ -2,7 +2,7 @@ package env
 
 import (
 	"github.com/imdario/mergo"
-	"loadconfig/source"
+	"github.com/jason-wj/load-config/source"
 	"os"
 	"strconv"
 	"strings"

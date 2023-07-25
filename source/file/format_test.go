@@ -1,7 +1,7 @@
 package file
 
 import (
-	"loadconfig/source"
+	"github.com/jason-wj/load-config/source"
 	"testing"
 )
 

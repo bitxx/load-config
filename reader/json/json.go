@@ -3,10 +3,10 @@ package json
 import (
 	"errors"
 	"github.com/imdario/mergo"
-	"loadconfig/encoder"
-	"loadconfig/encoder/json"
-	"loadconfig/reader"
-	"loadconfig/source"
+	"github.com/jason-wj/load-config/encoder"
+	"github.com/jason-wj/load-config/encoder/json"
+	"github.com/jason-wj/load-config/reader"
+	"github.com/jason-wj/load-config/source"
 	"time"
 )
 

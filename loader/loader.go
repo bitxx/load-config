@@ -3,8 +3,8 @@ package loader
 
 import (
 	"context"
-	"loadconfig/reader"
-	"loadconfig/source"
+	"github.com/jason-wj/load-config/reader"
+	"github.com/jason-wj/load-config/source"
 )
 
 // Loader manages loading sources

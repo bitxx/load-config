@@ -2,7 +2,7 @@ package box
 
 import (
 	"crypto/rand"
-	"loadconfig/secrets"
+	"github.com/jason-wj/load-config/secrets"
 	"reflect"
 	"testing"
 

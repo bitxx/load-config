@@ -1,9 +1,9 @@
 package loadconfig
 
 import (
-	"loadconfig/loader"
-	"loadconfig/reader"
-	"loadconfig/source"
+	"github.com/jason-wj/load-config/loader"
+	"github.com/jason-wj/load-config/reader"
+	"github.com/jason-wj/load-config/source"
 )
 
 // WithLoader sets the loader for manager config

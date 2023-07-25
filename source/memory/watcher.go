@@ -1,7 +1,7 @@
 package memory
 
 import (
-	"loadconfig/source"
+	"github.com/jason-wj/load-config/source"
 )
 
 type watcher struct {

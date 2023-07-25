@@ -2,7 +2,7 @@ package file
 
 import (
 	"context"
-	"loadconfig/source"
+	"github.com/jason-wj/load-config/source"
 )
 
 type filePathKey struct{}

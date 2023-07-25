@@ -1,7 +1,7 @@
 package file
 
 import (
-	"loadconfig/encoder"
+	"github.com/jason-wj/load-config/encoder"
 	"strings"
 )
 
