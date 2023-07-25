@@ -2,7 +2,7 @@
 package file
 
 import (
-	"github.com/jason-wj/loadconfig/source"
+	"github.com/jason-wj/load-config/source"
 	"io/ioutil"
 	"os"
 )

@@ -2,7 +2,7 @@
 package memory
 
 import (
-	"github.com/jason-wj/loadconfig/source"
+	"github.com/jason-wj/load-config/source"
 	"sync"
 	"time"
 

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"flag"
 	"github.com/imdario/mergo"
-	"github.com/jason-wj/loadconfig/source"
+	"github.com/jason-wj/load-config/source"
 	"strings"
 	"time"
 )

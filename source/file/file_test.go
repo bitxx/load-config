@@ -2,9 +2,7 @@ package file_test
 
 import (
 	"fmt"
-	"github.com/jason-wj/loadconfig"
-
-	"github.com/jason-wj/loadconfig/source/file"
+	"github.com/jason-wj/load-config/source/file"
 	"os"
 	"path/filepath"
 	"testing"

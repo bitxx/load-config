@@ -2,7 +2,7 @@ package flag
 
 import (
 	"context"
-	"github.com/jason-wj/loadconfig/source"
+	"github.com/jason-wj/load-config/source"
 )
 
 type includeUnsetKey struct{}

@@ -3,10 +3,10 @@ package loadconfig
 
 import (
 	"context"
-	"github.com/jason-wj/loadconfig/loader"
-	"github.com/jason-wj/loadconfig/reader"
-	"github.com/jason-wj/loadconfig/source"
-	"github.com/jason-wj/loadconfig/source/file"
+	"github.com/jason-wj/load-config/loader"
+	"github.com/jason-wj/load-config/reader"
+	"github.com/jason-wj/load-config/source"
+	"github.com/jason-wj/load-config/source/file"
 )
 
 // Config is an interface abstraction for dynamic configuration
