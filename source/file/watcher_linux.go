@@ -4,8 +4,8 @@
 package file
 
 import (
+	"github.com/bitxx/load-config/source"
 	"github.com/fsnotify/fsnotify"
-	"github.com/jason-wj/load-config/source"
 	"os"
 )
 

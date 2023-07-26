@@ -1,9 +1,9 @@
 package memory
 
 import (
-	"github.com/jason-wj/load-config/loader"
-	"github.com/jason-wj/load-config/reader"
-	"github.com/jason-wj/load-config/source"
+	"github.com/bitxx/load-config/loader"
+	"github.com/bitxx/load-config/reader"
+	"github.com/bitxx/load-config/source"
 )
 
 // WithSource appends a source to list of sources

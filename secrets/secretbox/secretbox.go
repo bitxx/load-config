@@ -3,7 +3,7 @@
 package secretbox
 
 import (
-	"github.com/jason-wj/load-config/secrets"
+	"github.com/bitxx/load-config/secrets"
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/nacl/secretbox"
 

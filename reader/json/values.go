@@ -3,8 +3,8 @@ package json
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/jason-wj/load-config/reader"
-	"github.com/jason-wj/load-config/source"
+	"github.com/bitxx/load-config/reader"
+	"github.com/bitxx/load-config/source"
 	"strconv"
 	"strings"
 	"time"

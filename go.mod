@@ -1,4 +1,4 @@
-module github.com/jason-wj/load-config
+module github.com/bitxx/load-config
 
 go 1.20
 

@@ -1,8 +1,8 @@
 package yaml
 
 import (
+	"github.com/bitxx/load-config/encoder"
 	"github.com/ghodss/yaml"
-	"github.com/jason-wj/load-config/encoder"
 )
 
 type yamlEncoder struct{}

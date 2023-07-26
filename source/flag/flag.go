@@ -3,8 +3,8 @@ package flag
 import (
 	"errors"
 	"flag"
+	"github.com/bitxx/load-config/source"
 	"github.com/imdario/mergo"
-	"github.com/jason-wj/load-config/source"
 	"strings"
 	"time"
 )

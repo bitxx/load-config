@@ -2,8 +2,8 @@ package file_test
 
 import (
 	"fmt"
-	loadconfig "github.com/jason-wj/load-config"
-	"github.com/jason-wj/load-config/source/file"
+	loadconfig "github.com/bitxx/load-config"
+	"github.com/bitxx/load-config/source/file"
 	"os"
 	"path/filepath"
 	"testing"

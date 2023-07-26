@@ -2,11 +2,11 @@ package json
 
 import (
 	"errors"
+	"github.com/bitxx/load-config/encoder"
+	"github.com/bitxx/load-config/encoder/json"
+	"github.com/bitxx/load-config/reader"
+	"github.com/bitxx/load-config/source"
 	"github.com/imdario/mergo"
-	"github.com/jason-wj/load-config/encoder"
-	"github.com/jason-wj/load-config/encoder/json"
-	"github.com/jason-wj/load-config/reader"
-	"github.com/jason-wj/load-config/source"
 	"time"
 )
 

@@ -1,8 +1,8 @@
 package env
 
 import (
+	"github.com/bitxx/load-config/source"
 	"github.com/imdario/mergo"
-	"github.com/jason-wj/load-config/source"
 	"os"
 	"strconv"
 	"strings"

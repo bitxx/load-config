@@ -1,7 +1,7 @@
 package loadconfig
 
 import (
-	"github.com/jason-wj/load-config/reader"
+	"github.com/bitxx/load-config/reader"
 	"time"
 )
 

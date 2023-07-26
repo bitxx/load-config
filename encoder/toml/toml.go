@@ -2,7 +2,7 @@ package toml
 
 import (
 	"bytes"
-	"github.com/jason-wj/load-config/encoder"
+	"github.com/bitxx/load-config/encoder"
 
 	"github.com/BurntSushi/toml"
 )
