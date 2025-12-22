@@ -2,11 +2,11 @@
 package memory
 
 import (
+	"crypto/rand"
+	"fmt"
 	"github.com/bitxx/load-config/source"
 	"sync"
 	"time"
-
-	"github.com/google/uuid"
 )
 
 type memory struct {
@@ -28,9 +28,19 @@ func (m *memory) Read() (*source.ChangeSet, error) {
 	return cs, nil
 }
 
+func (m *memory) generateWatcherID() string {
+	// 使用方案2（推荐）或方案1
+	b := make([]byte, 16)
+	rand.Read(b)
+	b[6] = (b[6] & 0x0f) | 0x40
+	b[8] = (b[8] & 0x3f) | 0x80
+	return fmt.Sprintf("%08x-%04x-%04x-%04x-%012x",
+		b[0:4], b[4:6], b[6:8], b[8:10], b[10:16])
+}
+
 func (m *memory) Watch() (source.Watcher, error) {
 	w := &watcher{
-		Id:      uuid.New().String(),
+		Id:      m.generateWatcherID(),
 		Updates: make(chan *source.ChangeSet, 100),
 		Source:  m,
 	}
