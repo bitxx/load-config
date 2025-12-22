@@ -100,10 +100,6 @@ func reverse(ss []string) {
 	}
 }
 
-func (e *env) Watch() (source.Watcher, error) {
-	return newWatcher()
-}
-
 func (e *env) Write(cs *source.ChangeSet) error {
 	return nil
 }

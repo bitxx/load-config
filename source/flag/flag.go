@@ -73,10 +73,6 @@ func reverse(ss []string) {
 	}
 }
 
-func (fs *flagsrc) Watch() (source.Watcher, error) {
-	return source.NewNoopWatcher()
-}
-
 func (fs *flagsrc) Write(cs *source.ChangeSet) error {
 	return nil
 }

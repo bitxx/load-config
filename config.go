@@ -18,20 +18,12 @@ type Config interface {
 	Init(opts ...Option) error
 	// Options in the config
 	Options() Options
-	// Close Stop the config loader/watcher
+	// Close Stop the config loader
 	Close() error
 	// Load config sources
 	Load(source ...source.Source) error
 	// Sync Force a source changeset sync
 	Sync() error
-	// Watch a value for changes
-	Watch(path ...string) (Watcher, error)
-}
-
-// Watcher is the config watcher
-type Watcher interface {
-	Next() (reader.Value, error)
-	Stop() error
 }
 
 // Entity 配置实体
@@ -92,11 +84,6 @@ func Get(path ...string) reader.Value {
 // Load config sources
 func Load(source ...source.Source) error {
 	return DefaultConfig.Load(source...)
-}
-
-// Watch a value for changes
-func Watch(path ...string) (Watcher, error) {
-	return DefaultConfig.Watch(path...)
 }
 
 // LoadFile is short hand for creating a file source and loading it

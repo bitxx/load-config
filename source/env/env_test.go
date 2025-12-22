@@ -5,7 +5,6 @@ import (
 	source "github.com/bitxx/load-config/source"
 	"os"
 	"testing"
-	"time"
 )
 
 func TestEnv_Read(t *testing.T) {
@@ -81,23 +80,6 @@ func TestEnvvar_Prefixes(t *testing.T) {
 				t.Errorf("expected key %v, not found", k)
 			}
 		}
-	}
-}
-
-func TestEnvvar_WatchNextNoOpsUntilStop(t *testing.T) {
-	src := NewSource(WithStrippedPrefix("GO_ADMIN_CORE_"))
-	w, err := src.Watch()
-	if err != nil {
-		t.Error(err)
-	}
-
-	go func() {
-		time.Sleep(50 * time.Millisecond)
-		w.Stop()
-	}()
-
-	if _, err := w.Next(); err != source.ErrWatcherStopped {
-		t.Errorf("expected watcher stopped error, got %v", err)
 	}
 }
 

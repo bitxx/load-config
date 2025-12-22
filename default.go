@@ -1,7 +1,6 @@
 package loadconfig
 
 import (
-	"bytes"
 	"github.com/bitxx/load-config/loader"
 	"github.com/bitxx/load-config/loader/memory"
 	"github.com/bitxx/load-config/reader"
@@ -9,7 +8,6 @@ import (
 	"github.com/bitxx/load-config/source"
 
 	"sync"
-	"time"
 )
 
 type config struct {
@@ -23,13 +21,6 @@ type config struct {
 	vals reader.Values
 }
 
-type watcher struct {
-	lw    loader.Watcher
-	rd    reader.Reader
-	path  []string
-	value reader.Value
-}
-
 func newConfig(opts ...Option) (Config, error) {
 	var c config
 
@@ -37,7 +28,6 @@ func newConfig(opts ...Option) (Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	go c.run()
 
 	return &c, nil
 }
@@ -79,72 +69,6 @@ func (c *config) Init(opts ...Option) error {
 
 func (c *config) Options() Options {
 	return c.opts
-}
-
-func (c *config) run() {
-	watch := func(w loader.Watcher) error {
-		for {
-			// get changeset
-			snap, err := w.Next()
-			if err != nil {
-				return err
-			}
-
-			c.Lock()
-
-			if c.snap.Version >= snap.Version {
-				c.Unlock()
-				continue
-			}
-
-			// save
-			c.snap = snap
-
-			// set values
-			c.vals, _ = c.opts.Reader.Values(snap.ChangeSet)
-			if c.opts.Entity != nil {
-				_ = c.vals.Scan(c.opts.Entity)
-				c.opts.Entity.OnChange()
-			}
-
-			c.Unlock()
-		}
-	}
-
-	for {
-		w, err := c.opts.Loader.Watch()
-		if err != nil {
-			time.Sleep(time.Second)
-			continue
-		}
-
-		done := make(chan bool)
-
-		// the stop watch func
-		go func() {
-			select {
-			case <-done:
-			case <-c.exit:
-			}
-			_ = w.Stop()
-		}()
-
-		// block watch
-		if err := watch(w); err != nil {
-			// do something better
-			time.Sleep(time.Second)
-		}
-
-		// close done chan
-		close(done)
-
-		// if the config is closed exit
-		select {
-		case <-c.exit:
-			return
-		default:
-		}
-	}
 }
 
 func (c *config) Map() map[string]interface{} {
@@ -262,48 +186,6 @@ func (c *config) Load(sources ...source.Source) error {
 	return nil
 }
 
-func (c *config) Watch(path ...string) (Watcher, error) {
-	value := c.Get(path...)
-
-	w, err := c.opts.Loader.Watch(path...)
-	if err != nil {
-		return nil, err
-	}
-
-	return &watcher{
-		lw:    w,
-		rd:    c.opts.Reader,
-		path:  path,
-		value: value,
-	}, nil
-}
-
 func (c *config) String() string {
 	return "config"
-}
-
-func (w *watcher) Next() (reader.Value, error) {
-	for {
-		s, err := w.lw.Next()
-		if err != nil {
-			return nil, err
-		}
-
-		// only process changes
-		if bytes.Equal(w.value.Bytes(), s.ChangeSet.Data) {
-			continue
-		}
-
-		v, err := w.rd.Values(s.ChangeSet)
-		if err != nil {
-			return nil, err
-		}
-
-		w.value = v.Get()
-		return w.value, nil
-	}
-}
-
-func (w *watcher) Stop() error {
-	return w.lw.Stop()
 }

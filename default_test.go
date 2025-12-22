@@ -2,13 +2,10 @@ package loadconfig
 
 import (
 	"fmt"
-	"github.com/bitxx/load-config/source"
 	"github.com/bitxx/load-config/source/env"
 	"github.com/bitxx/load-config/source/file"
-	"github.com/bitxx/load-config/source/memory"
 	"os"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"testing"
 	"time"
@@ -127,39 +124,5 @@ func TestConfigMerge(t *testing.T) {
 		t.Fatalf("Expected %v but got %v",
 			"rabbit.testing.com",
 			actualHost)
-	}
-}
-
-func equalS(t *testing.T, actual, expect string) {
-	if actual != expect {
-		t.Errorf("Expected %s but got %s", actual, expect)
-	}
-}
-
-func TestConfigWatcherDirtyOverrite(t *testing.T) {
-	n := runtime.GOMAXPROCS(0)
-	defer runtime.GOMAXPROCS(n)
-
-	runtime.GOMAXPROCS(1)
-
-	l := 100
-
-	ss := make([]source.Source, l, l)
-
-	for i := 0; i < l; i++ {
-		ss[i] = memory.NewSource(memory.WithJSON([]byte(fmt.Sprintf(`{"key%d": "val%d"}`, i, i))))
-	}
-
-	conf, _ := NewConfig()
-
-	for _, s := range ss {
-		_ = conf.Load(s)
-	}
-	runtime.Gosched()
-
-	for i, _ := range ss {
-		k := fmt.Sprintf("key%d", i)
-		v := fmt.Sprintf("val%d", i)
-		equalS(t, conf.Get(k).String(""), v)
 	}
 }

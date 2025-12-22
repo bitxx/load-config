@@ -10,5 +10,5 @@ func TestName(t *testing.T) {
 	Setup(
 		file.NewSource(file.WithPath("./settings.dev.yml")),
 	)
-	fmt.Println(AuthConfig.Secret)
+	fmt.Println(ApplicationConfig.Name)
 }

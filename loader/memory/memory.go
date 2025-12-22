@@ -1,8 +1,6 @@
 package memory
 
 import (
-	"bytes"
-	"container/list"
 	"errors"
 	"fmt"
 	"github.com/bitxx/load-config/loader"
@@ -27,94 +25,11 @@ type memory struct {
 	sets []*source.ChangeSet
 	// all the sources
 	sources []source.Source
-
-	watchers *list.List
 }
 
 type updateValue struct {
 	version string
 	value   reader.Value
-}
-
-type watcher struct {
-	exit    chan bool
-	path    []string
-	value   reader.Value
-	reader  reader.Reader
-	version string
-	updates chan updateValue
-}
-
-func (m *memory) watch(idx int, s source.Source) {
-	// watches a source for changes
-	watch := func(idx int, s source.Watcher) error {
-		for {
-			// get changeset
-			cs, err := s.Next()
-			if err != nil {
-				return err
-			}
-
-			m.Lock()
-
-			// save
-			m.sets[idx] = cs
-
-			// merge sets
-			set, err := m.opts.Reader.Merge(m.sets...)
-			if err != nil {
-				m.Unlock()
-				return err
-			}
-
-			// set values
-			m.vals, _ = m.opts.Reader.Values(set)
-			m.snap = &loader.Snapshot{
-				ChangeSet: set,
-				Version:   genVer(),
-			}
-			m.Unlock()
-
-			// send watch updates
-			m.update()
-		}
-	}
-
-	for {
-		// watch the source
-		w, err := s.Watch()
-		if err != nil {
-			time.Sleep(time.Second)
-			continue
-		}
-
-		done := make(chan bool)
-
-		// the stop watch func
-		go func() {
-			select {
-			case <-done:
-			case <-m.exit:
-			}
-			_ = w.Stop()
-		}()
-
-		// block watch
-		if err := watch(idx, w); err != nil {
-			// do something better
-			time.Sleep(time.Second)
-		}
-
-		// close done chan
-		close(done)
-
-		// if the config is closed exit
-		select {
-		case <-m.exit:
-			return
-		default:
-		}
-	}
 }
 
 func (m *memory) loaded() bool {
@@ -146,40 +61,7 @@ func (m *memory) reload() error {
 	}
 
 	m.Unlock()
-
-	// update watchers
-	m.update()
-
 	return nil
-}
-
-func (m *memory) update() {
-	watchers := make([]*watcher, 0, m.watchers.Len())
-
-	m.RLock()
-	for e := m.watchers.Front(); e != nil; e = e.Next() {
-		watchers = append(watchers, e.Value.(*watcher))
-	}
-
-	vals := m.vals
-	snap := m.snap
-	m.RUnlock()
-
-	for _, w := range watchers {
-		if w.version >= snap.Version {
-			continue
-		}
-
-		uv := updateValue{
-			version: m.snap.Version,
-			value:   vals.Get(w.path...),
-		}
-
-		select {
-		case w.updates <- uv:
-		default:
-		}
-	}
 }
 
 // Snapshot returns a snapshot of the current loaded config
@@ -243,9 +125,6 @@ func (m *memory) Sync() error {
 	}
 
 	m.Unlock()
-
-	// update watchers
-	m.update()
 
 	if len(gerr) > 0 {
 		return fmt.Errorf("source loading errors: %s", strings.Join(gerr, "\n"))
@@ -318,9 +197,7 @@ func (m *memory) Load(sources ...source.Source) error {
 		m.Lock()
 		m.sources = append(m.sources, source)
 		m.sets = append(m.sets, set)
-		idx := len(m.sets) - 1
 		m.Unlock()
-		go m.watch(idx, source)
 	}
 
 	if err := m.reload(); err != nil {
@@ -334,92 +211,8 @@ func (m *memory) Load(sources ...source.Source) error {
 	return nil
 }
 
-func (m *memory) Watch(path ...string) (loader.Watcher, error) {
-	value, err := m.Get(path...)
-	if err != nil {
-		return nil, err
-	}
-
-	m.Lock()
-
-	w := &watcher{
-		exit:    make(chan bool),
-		path:    path,
-		value:   value,
-		reader:  m.opts.Reader,
-		updates: make(chan updateValue, 1),
-		version: m.snap.Version,
-	}
-
-	e := m.watchers.PushBack(w)
-
-	m.Unlock()
-
-	go func() {
-		<-w.exit
-		m.Lock()
-		m.watchers.Remove(e)
-		m.Unlock()
-	}()
-
-	return w, nil
-}
-
 func (m *memory) String() string {
 	return "memory"
-}
-
-func (w *watcher) Next() (*loader.Snapshot, error) {
-	update := func(v reader.Value) *loader.Snapshot {
-		w.value = v
-
-		cs := &source.ChangeSet{
-			Data:      v.Bytes(),
-			Format:    w.reader.String(),
-			Source:    "memory",
-			Timestamp: time.Now(),
-		}
-		cs.Checksum = cs.Sum()
-
-		return &loader.Snapshot{
-			ChangeSet: cs,
-			Version:   w.version,
-		}
-
-	}
-
-	for {
-		select {
-		case <-w.exit:
-			return nil, errors.New("watcher stopped")
-
-		case uv := <-w.updates:
-			if uv.version <= w.version {
-				continue
-			}
-
-			v := uv.value
-
-			w.version = uv.version
-
-			if bytes.Equal(w.value.Bytes(), v.Bytes()) {
-				continue
-			}
-
-			return update(v), nil
-		}
-	}
-}
-
-func (w *watcher) Stop() error {
-	select {
-	case <-w.exit:
-	default:
-		close(w.exit)
-		close(w.updates)
-	}
-
-	return nil
 }
 
 func genVer() string {
@@ -436,17 +229,15 @@ func NewLoader(opts ...loader.Option) loader.Loader {
 	}
 
 	m := &memory{
-		exit:     make(chan bool),
-		opts:     options,
-		watchers: list.New(),
-		sources:  options.Source,
+		exit:    make(chan bool),
+		opts:    options,
+		sources: options.Source,
 	}
 
 	m.sets = make([]*source.ChangeSet, len(options.Source))
 
 	for i, s := range options.Source {
 		m.sets[i] = &source.ChangeSet{Source: s.String()}
-		go m.watch(i, s)
 	}
 
 	return m

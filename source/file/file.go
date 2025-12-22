@@ -46,13 +46,6 @@ func (f *file) String() string {
 	return "file"
 }
 
-func (f *file) Watch() (source.Watcher, error) {
-	if _, err := os.Stat(f.path); err != nil {
-		return nil, err
-	}
-	return newWatcher(f)
-}
-
 func (f *file) Write(cs *source.ChangeSet) error {
 	return nil
 }
