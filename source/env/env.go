@@ -1,8 +1,8 @@
 package env
 
 import (
+	"dario.cat/mergo"
 	"github.com/bitxx/load-config/source"
-	"github.com/imdario/mergo"
 	"os"
 	"strconv"
 	"strings"

@@ -15,29 +15,29 @@ type memory struct {
 	Watchers  map[string]*watcher
 }
 
-func (s *memory) Read() (*source.ChangeSet, error) {
-	s.RLock()
+func (m *memory) Read() (*source.ChangeSet, error) {
+	m.RLock()
 	cs := &source.ChangeSet{
-		Format:    s.ChangeSet.Format,
-		Timestamp: s.ChangeSet.Timestamp,
-		Data:      s.ChangeSet.Data,
-		Checksum:  s.ChangeSet.Checksum,
-		Source:    s.ChangeSet.Source,
+		Format:    m.ChangeSet.Format,
+		Timestamp: m.ChangeSet.Timestamp,
+		Data:      m.ChangeSet.Data,
+		Checksum:  m.ChangeSet.Checksum,
+		Source:    m.ChangeSet.Source,
 	}
-	s.RUnlock()
+	m.RUnlock()
 	return cs, nil
 }
 
-func (s *memory) Watch() (source.Watcher, error) {
+func (m *memory) Watch() (source.Watcher, error) {
 	w := &watcher{
 		Id:      uuid.New().String(),
 		Updates: make(chan *source.ChangeSet, 100),
-		Source:  s,
+		Source:  m,
 	}
 
-	s.Lock()
-	s.Watchers[w.Id] = w
-	s.Unlock()
+	m.Lock()
+	m.Watchers[w.Id] = w
+	m.Unlock()
 	return w, nil
 }
 
@@ -47,34 +47,34 @@ func (m *memory) Write(cs *source.ChangeSet) error {
 }
 
 // Update allows manual updates of the config data.
-func (s *memory) Update(c *source.ChangeSet) {
+func (m *memory) Update(c *source.ChangeSet) {
 	// don't process nil
 	if c == nil {
 		return
 	}
 
 	// hash the file
-	s.Lock()
+	m.Lock()
 	// update changeset
-	s.ChangeSet = &source.ChangeSet{
+	m.ChangeSet = &source.ChangeSet{
 		Data:      c.Data,
 		Format:    c.Format,
 		Source:    "memory",
 		Timestamp: time.Now(),
 	}
-	s.ChangeSet.Checksum = s.ChangeSet.Sum()
+	m.ChangeSet.Checksum = m.ChangeSet.Sum()
 
 	// update watchers
-	for _, w := range s.Watchers {
+	for _, w := range m.Watchers {
 		select {
-		case w.Updates <- s.ChangeSet:
+		case w.Updates <- m.ChangeSet:
 		default:
 		}
 	}
-	s.Unlock()
+	m.Unlock()
 }
 
-func (s *memory) String() string {
+func (m *memory) String() string {
 	return "memory"
 }
 

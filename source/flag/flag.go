@@ -1,10 +1,10 @@
 package flag
 
 import (
+	"dario.cat/mergo"
 	"errors"
 	"flag"
 	"github.com/bitxx/load-config/source"
-	"github.com/imdario/mergo"
 	"strings"
 	"time"
 )

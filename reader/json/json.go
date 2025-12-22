@@ -1,12 +1,12 @@
 package json
 
 import (
+	"dario.cat/mergo"
 	"errors"
 	"github.com/bitxx/load-config/encoder"
 	"github.com/bitxx/load-config/encoder/json"
 	"github.com/bitxx/load-config/reader"
 	"github.com/bitxx/load-config/source"
-	"github.com/imdario/mergo"
 	"time"
 )
 

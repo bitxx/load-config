@@ -3,8 +3,6 @@ package reader
 import (
 	"github.com/bitxx/load-config/encoder"
 	"github.com/bitxx/load-config/encoder/json"
-	"github.com/bitxx/load-config/encoder/toml"
-	"github.com/bitxx/load-config/encoder/xml"
 	"github.com/bitxx/load-config/encoder/yaml"
 )
 
@@ -19,8 +17,6 @@ func NewOptions(opts ...Option) Options {
 		Encoding: map[string]encoder.Encoder{
 			"json": json.NewEncoder(),
 			"yaml": yaml.NewEncoder(),
-			"toml": toml.NewEncoder(),
-			"xml":  xml.NewEncoder(),
 			"yml":  yaml.NewEncoder(),
 		},
 	}
