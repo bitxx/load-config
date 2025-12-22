@@ -27,11 +27,6 @@ type memory struct {
 	sources []source.Source
 }
 
-type updateValue struct {
-	version string
-	value   reader.Value
-}
-
 func (m *memory) loaded() bool {
 	var loaded bool
 	m.RLock()
