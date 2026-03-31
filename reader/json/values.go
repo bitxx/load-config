@@ -8,66 +8,133 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
-	simple "github.com/bitly/go-simplejson"
 )
 
 type jsonValues struct {
-	ch *source.ChangeSet
-	sj *simple.Json
+	ch   *source.ChangeSet
+	data interface{}
 }
 
 type jsonValue struct {
-	*simple.Json
+	val interface{}
 }
+
+// ---------- init ----------
 
 func newValues(ch *source.ChangeSet) (reader.Values, error) {
-	sj := simple.New()
-	data, _ := reader.ReplaceEnvVars(ch.Data)
-	if err := sj.UnmarshalJSON(data); err != nil {
-		sj.SetPath(nil, string(ch.Data))
+	var data interface{}
+
+	b, _ := reader.ReplaceEnvVars(ch.Data)
+	if err := json.Unmarshal(b, &data); err != nil {
+		data = string(ch.Data)
 	}
-	return &jsonValues{ch, sj}, nil
+
+	return &jsonValues{ch: ch, data: data}, nil
 }
 
-func (j *jsonValues) Get(path ...string) reader.Value {
-	return &jsonValue{j.sj.GetPath(path...)}
+// ---------- path helpers ----------
+
+func get(data interface{}, path ...string) interface{} {
+	cur := data
+
+	for _, p := range path {
+		switch v := cur.(type) {
+		case map[string]interface{}:
+			cur = v[p]
+		case []interface{}:
+			idx, err := strconv.Atoi(p)
+			if err != nil || idx < 0 || idx >= len(v) {
+				return nil
+			}
+			cur = v[idx]
+		default:
+			return nil
+		}
+	}
+	return cur
 }
 
-func (j *jsonValues) Del(path ...string) {
-	// delete the tree?
+func set(data interface{}, val interface{}, path ...string) interface{} {
 	if len(path) == 0 {
-		j.sj = simple.New()
+		return val
+	}
+
+	m, ok := data.(map[string]interface{})
+	if !ok {
+		m = map[string]interface{}{}
+	}
+
+	cur := m
+	for i := 0; i < len(path)-1; i++ {
+		p := path[i]
+		if next, ok := cur[p].(map[string]interface{}); ok {
+			cur = next
+		} else {
+			newMap := map[string]interface{}{}
+			cur[p] = newMap
+			cur = newMap
+		}
+	}
+
+	cur[path[len(path)-1]] = val
+	return m
+}
+
+func del(data interface{}, path ...string) {
+	if len(path) == 0 {
+		return
+	}
+
+	m, ok := data.(map[string]interface{})
+	if !ok {
 		return
 	}
 
 	if len(path) == 1 {
-		j.sj.Del(path[0])
+		delete(m, path[0])
 		return
 	}
 
-	vals := j.sj.GetPath(path[:len(path)-1]...)
-	vals.Del(path[len(path)-1])
-	j.sj.SetPath(path[:len(path)-1], vals.Interface())
-	return
+	next, ok := m[path[0]]
+	if !ok {
+		return
+	}
+
+	del(next, path[1:]...)
+}
+
+// ---------- Values ----------
+
+func (j *jsonValues) Get(path ...string) reader.Value {
+	return &jsonValue{val: get(j.data, path...)}
+}
+
+func (j *jsonValues) Del(path ...string) {
+	if len(path) == 0 {
+		j.data = map[string]interface{}{}
+		return
+	}
+	del(j.data, path...)
 }
 
 func (j *jsonValues) Set(val interface{}, path ...string) {
-	j.sj.SetPath(path, val)
+	j.data = set(j.data, val, path...)
 }
 
 func (j *jsonValues) Bytes() []byte {
-	b, _ := j.sj.MarshalJSON()
+	b, _ := json.Marshal(j.data)
 	return b
 }
 
 func (j *jsonValues) Map() map[string]interface{} {
-	m, _ := j.sj.Map()
-	return m
+	if m, ok := j.data.(map[string]interface{}); ok {
+		return m
+	}
+	return nil
 }
 
 func (j *jsonValues) Scan(v interface{}) error {
-	b, err := j.sj.MarshalJSON()
+	b, err := json.Marshal(j.data)
 	if err != nil {
 		return err
 	}
@@ -78,109 +145,98 @@ func (j *jsonValues) String() string {
 	return "json"
 }
 
+// ---------- Value ----------
+
 func (j *jsonValue) Bool(def bool) bool {
-	b, err := j.Json.Bool()
-	if err == nil {
-		return b
+	switch v := j.val.(type) {
+	case bool:
+		return v
+	case string:
+		b, err := strconv.ParseBool(v)
+		if err == nil {
+			return b
+		}
 	}
-
-	str, ok := j.Interface().(string)
-	if !ok {
-		return def
-	}
-
-	b, err = strconv.ParseBool(str)
-	if err != nil {
-		return def
-	}
-
-	return b
+	return def
 }
 
 func (j *jsonValue) Int(def int) int {
-	i, err := j.Json.Int()
-	if err == nil {
-		return i
+	switch v := j.val.(type) {
+	case float64:
+		return int(v)
+	case int:
+		return v
+	case string:
+		i, err := strconv.Atoi(v)
+		if err == nil {
+			return i
+		}
 	}
-
-	str, ok := j.Interface().(string)
-	if !ok {
-		return def
-	}
-
-	i, err = strconv.Atoi(str)
-	if err != nil {
-		return def
-	}
-
-	return i
+	return def
 }
 
 func (j *jsonValue) String(def string) string {
-	return j.Json.MustString(def)
+	if s, ok := j.val.(string); ok {
+		return s
+	}
+	return def
 }
 
 func (j *jsonValue) Float64(def float64) float64 {
-	f, err := j.Json.Float64()
-	if err == nil {
-		return f
+	switch v := j.val.(type) {
+	case float64:
+		return v
+	case string:
+		f, err := strconv.ParseFloat(v, 64)
+		if err == nil {
+			return f
+		}
 	}
-
-	str, ok := j.Interface().(string)
-	if !ok {
-		return def
-	}
-
-	f, err = strconv.ParseFloat(str, 64)
-	if err != nil {
-		return def
-	}
-
-	return f
+	return def
 }
 
 func (j *jsonValue) Duration(def time.Duration) time.Duration {
-	v, err := j.Json.String()
-	if err != nil {
-		return def
+	if s, ok := j.val.(string); ok {
+		d, err := time.ParseDuration(s)
+		if err == nil {
+			return d
+		}
 	}
-
-	value, err := time.ParseDuration(v)
-	if err != nil {
-		return def
-	}
-
-	return value
+	return def
 }
 
 func (j *jsonValue) StringSlice(def []string) []string {
-	v, err := j.Json.String()
-	if err == nil {
+	switch v := j.val.(type) {
+	case string:
 		sl := strings.Split(v, ",")
 		if len(sl) > 1 {
 			return sl
 		}
+	case []interface{}:
+		res := make([]string, 0, len(v))
+		for _, item := range v {
+			res = append(res, fmt.Sprintf("%v", item))
+		}
+		return res
 	}
-	return j.Json.MustStringArray(def)
+	return def
 }
 
 func (j *jsonValue) StringMap(def map[string]string) map[string]string {
-	m, err := j.Json.Map()
-	if err != nil {
+	m, ok := j.val.(map[string]interface{})
+	if !ok {
 		return def
 	}
 
-	res := map[string]string{}
-
+	res := make(map[string]string, len(m))
 	for k, v := range m {
 		res[k] = fmt.Sprintf("%v", v)
 	}
-
 	return res
 }
 
 func (j *jsonValue) Scan(v interface{}) error {
-	b, err := j.Json.MarshalJSON()
+	b, err := json.Marshal(j.val)
 	if err != nil {
 		return err
 	}
@@ -188,14 +244,9 @@ func (j *jsonValue) Scan(v interface{}) error {
 }
 
 func (j *jsonValue) Bytes() []byte {
-	b, err := j.Json.Bytes()
+	b, err := json.Marshal(j.val)
 	if err != nil {
-		// try return marshalled
-		b, err = j.Json.MarshalJSON()
-		if err != nil {
-			return []byte{}
-		}
-		return b
+		return []byte{}
 	}
 	return b
 }
