@@ -1,12 +1,12 @@
 package json
 
 import (
-	"dario.cat/mergo"
 	"errors"
 	"github.com/bitxx/load-config/encoder"
 	"github.com/bitxx/load-config/encoder/json"
 	"github.com/bitxx/load-config/reader"
 	"github.com/bitxx/load-config/source"
+	"github.com/bitxx/load-config/util"
 	"time"
 )
 
@@ -18,14 +18,10 @@ type jsonReader struct {
 }
 
 func (j *jsonReader) Merge(changes ...*source.ChangeSet) (*source.ChangeSet, error) {
-	var merged map[string]interface{}
+	merged := make(map[string]interface{})
 
 	for _, m := range changes {
-		if m == nil {
-			continue
-		}
-
-		if len(m.Data) == 0 {
+		if m == nil || len(m.Data) == 0 {
 			continue
 		}
 
@@ -39,9 +35,7 @@ func (j *jsonReader) Merge(changes ...*source.ChangeSet) (*source.ChangeSet, err
 		if err := codec.Decode(m.Data, &data); err != nil {
 			return nil, err
 		}
-		if err := mergo.Map(&merged, data, mergo.WithOverride); err != nil {
-			return nil, err
-		}
+		util.MergeMaps(merged, data)
 	}
 
 	b, err := j.json.Encode(merged)

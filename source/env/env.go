@@ -1,8 +1,8 @@
 package env
 
 import (
-	"dario.cat/mergo"
 	"github.com/bitxx/load-config/source"
+	"github.com/bitxx/load-config/util"
 	"os"
 	"strconv"
 	"strings"
@@ -20,19 +20,19 @@ type env struct {
 }
 
 func (e *env) Read() (*source.ChangeSet, error) {
-	var changes map[string]interface{}
+	changes := make(map[string]interface{})
 
-	for _, env := range os.Environ() {
-
+	for _, envStr := range os.Environ() {
+		// prefix
 		if len(e.prefixes) > 0 || len(e.strippedPrefixes) > 0 {
 			notFound := true
 
-			if _, ok := matchPrefix(e.prefixes, env); ok {
+			if _, ok := matchPrefix(e.prefixes, envStr); ok {
 				notFound = false
 			}
 
-			if match, ok := matchPrefix(e.strippedPrefixes, env); ok {
-				env = strings.TrimPrefix(env, match)
+			if match, ok := matchPrefix(e.strippedPrefixes, envStr); ok {
+				envStr = strings.TrimPrefix(envStr, match)
 				notFound = false
 			}
 
@@ -41,11 +41,16 @@ func (e *env) Read() (*source.ChangeSet, error) {
 			}
 		}
 
-		pair := strings.SplitN(env, "=", 2)
+		// key/value split
+		pair := strings.SplitN(envStr, "=", 2)
+		key := pair[0]
 		value := pair[1]
-		keys := strings.Split(strings.ToLower(pair[0]), "_")
+
+		// key split
+		keys := strings.Split(strings.ToLower(key), "_")
 		reverse(keys)
 
+		// struct temp map
 		tmp := make(map[string]interface{})
 		for i, k := range keys {
 			if i == 0 {
@@ -62,9 +67,7 @@ func (e *env) Read() (*source.ChangeSet, error) {
 			tmp = map[string]interface{}{k: tmp}
 		}
 
-		if err := mergo.Map(&changes, tmp); err != nil {
-			return nil, err
-		}
+		util.MergeMaps(changes, tmp)
 	}
 
 	b, err := e.opts.Encoder.Encode(changes)

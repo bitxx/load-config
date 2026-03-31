@@ -1,10 +1,10 @@
 package flag
 
 import (
-	"dario.cat/mergo"
 	"errors"
 	"flag"
 	"github.com/bitxx/load-config/source"
+	"github.com/bitxx/load-config/util"
 	"strings"
 	"time"
 )
@@ -18,7 +18,7 @@ func (fs *flagsrc) Read() (*source.ChangeSet, error) {
 		return nil, errors.New("flags not parsed")
 	}
 
-	var changes map[string]interface{}
+	changes := make(map[string]interface{})
 
 	visitFn := func(f *flag.Flag) {
 		n := strings.ToLower(f.Name)
@@ -35,8 +35,7 @@ func (fs *flagsrc) Read() (*source.ChangeSet, error) {
 			tmp = map[string]interface{}{k: tmp}
 		}
 
-		_ = mergo.Map(&changes, tmp) // need to sort error handling
-		return
+		util.MergeMaps(changes, tmp)
 	}
 
 	unset, ok := fs.opts.Context.Value(includeUnsetKey{}).(bool)
